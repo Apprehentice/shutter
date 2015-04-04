@@ -60,7 +60,8 @@ function Shutter:advance(speed)
   speed = speed or 1
 
   assert(type(speed) == "number", "bad argument #1 to 'advance' (number expected, got " .. type(speed) .. ")")
-  self.frame = self.frame + speed
+  self.frame = (self.frame + speed) % self:getFrameCount()
+  if self.frame = 0 then self.frame = self:getFrameCount() end
 end
 
 function Shutter:getFrame()
