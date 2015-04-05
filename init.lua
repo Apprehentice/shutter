@@ -60,8 +60,7 @@ function Shutter:advance(speed)
   speed = speed or 1
 
   assert(type(speed) == "number", "bad argument #1 to 'advance' (number expected, got " .. type(speed) .. ")")
-  self.frame = (self.frame + speed) % self:getFrameCount()
-  if self.frame = 0 then self.frame = self:getFrameCount() end
+  self:setFrameIndex(self.frame + speed)
 end
 
 function Shutter:getFrame()
@@ -74,7 +73,8 @@ end
 
 function Shutter:setFrameIndex(index)
   assert(type(index) == "number", "bad argument #1 to 'setFrameIndex' (number expected, got " .. type(index) .. ")")
-  self.frame = index
+  self.frame = index % self:getFrameCount()
+  if self.frame = 0 then self.frame = self:getFrameCount() end
 end
 
 function Shutter:getFrameCount()
@@ -93,7 +93,7 @@ function Shutter:draw(x, y, r, sx, sy, ox, oy, kx, ky)
       love.graphics.draw(frame.drawable, x, y, r, sx, sy, ox, oy, kx, ky)
     end
   elseif t == "function" then
-    frame(self:getFrameIndex(), x, y, r, sx, sy, ox, oy, kx, ky)
+    frame(self:getFrameIndex(), self:getFrameCount(), x, y, r, sx, sy, ox, oy, kx, ky)
   else
     error("invalid frame")
   end
